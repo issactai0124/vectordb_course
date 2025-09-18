@@ -2,16 +2,16 @@ require('dotenv').config();
 
 const { ChromaClient } = require("chromadb");
 const client = new ChromaClient();
-const { InferenceClient } = require("@huggingface/inference");
 const prompt = require('prompt-sync')();
 
 // Sample job postings data
 const jobPostings = require('./jobPostings.js');
 const collectionName = "job_collection";
 
+const { InferenceClient } = require("@huggingface/inference");
 // Initialize Hugging Face Inference with API key from environment variable
 if (!process.env.HF_API_KEY) {
-  throw new Error("Missing Hugging Face API key. Please set HF_API_KEY in your environment.");
+    throw new Error("Missing Hugging Face API key. Please set HF_API_KEY in your environment.");
 }
 const hf = new InferenceClient(process.env.HF_API_KEY);
 
@@ -107,7 +107,7 @@ async function promptUserInput(promptText) {
 }
     
 async function main() {
-    const query = await promptUserInput("Enter your job search query, keyword separated with pipes (|) [default: Developer|Boston|Full-Time]: ");
+    const query = await promptUserInput("Enter your job search query, keywords separated with pipes (|) [default: Developer|Boston|Full-Time]: ");
     console.log('Query:', query)
 
     try {
@@ -136,8 +136,8 @@ async function main() {
         const initialResults = await performSimilaritySearch(collection, query, filterCriteria);
 
         console.log('Query results:')
-        initialResults.slice(0, 3).forEach(({jobTitle, jobDescription, jobType, company}, index) => {
-            console.log(`Top ${index + 1} jobTitle: ${jobTitle}, jobType: ${jobType}, jobDescription: ${jobDescription}, Company: ${company}`);
+        initialResults.slice(0, 3).forEach(({jobTitle, jobDescription, jobType, location ,company}, index) => {
+            console.log(`Top ${index + 1} jobTitle: ${jobTitle}, jobType: ${jobType}, jobDescription: ${jobDescription}, location: ${location}, Company: ${company}`);
         });
 
     } catch (error) {
